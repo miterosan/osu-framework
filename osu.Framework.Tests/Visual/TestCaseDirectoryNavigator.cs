@@ -30,9 +30,9 @@ namespace osu.Framework.Tests.Visual
             });
 
             AddAssert("There are only drives visible", () => navigator.internalFillFlowContainer.Children.All(entry => entry.Type == EntryType.Drive));
-            AddStep("Select the first drive", () => navigator.internalFillFlowContainer.Children.First().TriggerOnClick());
+            AddStep("Select the first drive", () => navigator.internalFillFlowContainer.Children.First().Click());
             AddUntilStep(() => {
-                navigator.internalFillFlowContainer.Children.Last(entry => entry.Type == EntryType.Directory).TriggerOnClick();
+                navigator.internalFillFlowContainer.Children.Last(entry => entry.Type == EntryType.Directory).Click();
                 return navigator.internalFillFlowContainer.Children.Count(entry => entry.Type == EntryType.Directory) == 0;
             });
         }

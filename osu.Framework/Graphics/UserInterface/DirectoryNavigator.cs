@@ -10,6 +10,7 @@ using osu.Framework.Configuration;
 using osu.Framework.Graphics.Containers;
 using osu.Framework.Graphics.Shapes;
 using osu.Framework.Graphics.Sprites;
+using osu.Framework.Input.States;
 
 namespace osu.Framework.Graphics.UserInterface
 {
@@ -61,7 +62,7 @@ namespace osu.Framework.Graphics.UserInterface
 
             fillFlowContainer.AddRange(entries.Select(entry => {
                 var visualEntryType = CreateVisualEntryType(entry.Value, entry.Key);
-                visualEntryType.Activated += () =>
+                visualEntryType.Action += () =>
                 {
                     switch (visualEntryType.Type)
                     {
@@ -113,18 +114,10 @@ namespace osu.Framework.Graphics.UserInterface
             public EntryType Type { get; }
             public string Path { get; }
 
-            public event Action Activated;
-
             public FileSystemEntry(EntryType type, string path) {
                 Type = type;
                 Path = path ?? throw new ArgumentNullException(nameof(path));
             }
-
-            protected override bool OnClick(Input.States.InputState state) {
-                Activated?.Invoke();
-                return true;
-            }
-
         }
     }
 }
