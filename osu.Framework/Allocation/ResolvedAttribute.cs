@@ -1,4 +1,4 @@
-// Copyright (c) 2007-2018 ppy Pty Ltd <contact@ppy.sh>.
+﻿// Copyright (c) 2007-2018 ppy Pty Ltd <contact@ppy.sh>.
 // Licensed under the MIT Licence - https://raw.githubusercontent.com/ppy/osu-framework/master/LICENCE
 
 using System;
@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using JetBrains.Annotations;
+using osu.Framework.Configuration;
 using osu.Framework.Extensions.TypeExtensions;
 using osu.Framework.Graphics;
 
@@ -44,12 +45,16 @@ namespace osu.Framework.Allocation
                     throw new AccessModifierNotAllowedForPropertySetterException(modifier, property);
 
                 var attribute = property.GetCustomAttribute<ResolvedAttribute>();
-                var fieldGetter = getDependency(property.PropertyType, type, attribute.CanBeNull);
+                var fieldGetter = getDependency(property.PropertyType, type, attribute.CanBeNull || property.PropertyType.IsNullable());
 
                 activators.Add((target, dc) => property.SetValue(target, fieldGetter(dc)));
             }
 
-            return (target, dc) => activators.ForEach(a => a(target, dc));
+            return (target, dc) =>
+            {
+                foreach (var a in activators)
+                    a(target, dc);
+            };
         }
 
         private static Func<IReadOnlyDependencyContainer, object> getDependency(Type type, Type requestingType, bool permitNulls) => dc =>
@@ -57,6 +62,10 @@ namespace osu.Framework.Allocation
             var val = dc.Get(type);
             if (val == null && !permitNulls)
                 throw new DependencyNotRegisteredException(requestingType, type);
+
+            if (val is IBindable bindableVal)
+                return bindableVal.GetBoundCopy();
+
             return val;
         };
     }

@@ -3,7 +3,9 @@
 
 using NUnit.Framework;
 using osu.Framework.Allocation;
+using osu.Framework.Configuration;
 using osu.Framework.Extensions.IEnumerableExtensions;
+using osu.Framework.Testing.Dependencies;
 
 namespace osu.Framework.Tests.Dependencies
 {
@@ -120,6 +122,71 @@ namespace osu.Framework.Tests.Dependencies
             Assert.AreEqual(testObject, receiver.Obj);
         }
 
+        [Test]
+        public void TestResolveInternalStruct()
+        {
+            var receiver = new Receiver12();
+
+            var testObject = new CachedStructProvider();
+
+            var dependencies = DependencyActivator.MergeDependencies(testObject, new DependencyContainer());
+
+            Assert.DoesNotThrow(() => dependencies.Inject(receiver));
+            Assert.AreEqual(testObject.CachedObject.Value, receiver.Obj.Value);
+        }
+
+        [TestCase(null)]
+        [TestCase(10)]
+        public void TestResolveNullableInternal(int? testValue)
+        {
+            var receiver = new Receiver13();
+
+            var testObject = new CachedNullableProvider();
+            testObject.SetValue(testValue);
+
+            var dependencies = DependencyActivator.MergeDependencies(testObject, new DependencyContainer());
+
+            dependencies.Inject(receiver);
+
+            Assert.AreEqual(testValue, receiver.Obj);
+        }
+
+        [Test]
+        public void TestResolveStructWithoutNullPermits()
+        {
+            Assert.Throws<DependencyNotRegisteredException>(() => new DependencyContainer().Inject(new Receiver14()));
+        }
+
+        [Test]
+        public void TestResolveStructWithNullPermits()
+        {
+            var receiver = new Receiver15();
+
+            Assert.DoesNotThrow(() => new DependencyContainer().Inject(receiver));
+            Assert.AreEqual(0, receiver.Obj);
+        }
+
+        [Test]
+        public void TestResolveBindable()
+        {
+            var receiver = new Receiver16();
+
+            var bindable = new Bindable<int>(10);
+            var dependencies = createDependencies(bindable);
+            dependencies.CacheAs<IBindable<int>>(bindable);
+
+            dependencies.Inject(receiver);
+
+            Assert.AreNotSame(bindable, receiver.Obj);
+            Assert.AreNotSame(bindable, receiver.Obj2);
+            Assert.AreEqual(bindable.Value, receiver.Obj.Value);
+            Assert.AreEqual(bindable.Value, receiver.Obj2.Value);
+
+            bindable.Value = 5;
+            Assert.AreEqual(bindable.Value, receiver.Obj.Value);
+            Assert.AreEqual(bindable.Value, receiver.Obj2.Value);
+        }
+
         private DependencyContainer createDependencies(params object[] toCache)
         {
             var dependencies = new DependencyContainer();
@@ -202,6 +269,39 @@ namespace osu.Framework.Tests.Dependencies
 
         private class Receiver11 : Receiver8
         {
+        }
+
+        private class Receiver12
+        {
+            [Resolved]
+            public CachedStructProvider.Struct Obj { get; private set; }
+        }
+
+        private class Receiver13
+        {
+            [Resolved]
+            public int? Obj { get; private set; }
+        }
+
+        private class Receiver14
+        {
+            [Resolved]
+            public int Obj { get; private set; }
+        }
+
+        private class Receiver15
+        {
+            [Resolved(CanBeNull = true)]
+            public int Obj { get; private set; } = 1;
+        }
+
+        private class Receiver16
+        {
+            [Resolved]
+            public Bindable<int> Obj { get; private set; }
+
+            [Resolved]
+            public IBindable<int> Obj2 { get; private set; }
         }
     }
 }
