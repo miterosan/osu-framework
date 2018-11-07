@@ -48,7 +48,7 @@ namespace osu.Framework.Graphics.UserInterface
             } else {
                 //for navigating to the parent directory.
                 entries.Add("..", EntryType.Dummy);
-                
+
                 DirectoryInfo currentDirectory = new DirectoryInfo(Current.Value);
 
                 //iterating over the directories and files.
@@ -69,9 +69,9 @@ namespace osu.Framework.Graphics.UserInterface
                         case EntryType.Dummy:
 
                             // then we are on root we want to go the drives selection.
-                            if (Path.GetPathRoot(Current.Value).Equals(Current.Value) &&  visualEntryType.Path == "..") 
+                            if (Path.GetPathRoot(Current.Value).Equals(Current.Value) && visualEntryType.Path == "..")
                                 Current.Value = string.Empty;
-                            else 
+                            else
                                 Current.Value = Path.GetFullPath(Path.Combine(Current.Value, visualEntryType.Path));
                             break;
                         case EntryType.Drive:
@@ -89,7 +89,7 @@ namespace osu.Framework.Graphics.UserInterface
         /// <param name="entryType">The type of the entry.</param>
         /// <param name="name">The name of the entry.</param>
         protected abstract FileSystemEntry CreateVisualEntryType(EntryType entryType, string name);
-        
+
         /// <summary>
         /// Creates a new FillFlow that is used internally for arranging the FileSystemEntries.
         /// You can use this fillflow container to customize the design of the DirectoryNavigator.
