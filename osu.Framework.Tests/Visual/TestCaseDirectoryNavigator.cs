@@ -43,7 +43,6 @@ namespace osu.Framework.Tests.Visual
             protected override FileSystemEntry CreateVisualEntryType(EntryType entryType, string name)
                 => new StyledFileSystemEntry(entryType, name);
 
-
             public FillFlowContainer<FileSystemEntry> internalFillFlowContainer { get; private set; }
 
             protected override FillFlowContainer<FileSystemEntry> CreateFillFlow()
@@ -99,8 +98,6 @@ namespace osu.Framework.Tests.Visual
                         }
                     } 
                 });
-
-
             }
         }
     }
