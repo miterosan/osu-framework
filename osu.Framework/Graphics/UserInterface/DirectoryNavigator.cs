@@ -1,3 +1,6 @@
+// Copyright (c) 2007-2018 ppy Pty Ltd <contact@ppy.sh>.
+// Licensed under the MIT Licence - https://raw.githubusercontent.com/ppy/osu-framework/master/LICENCE
+
 using System;
 using System.IO;
 using System.Linq;
@@ -16,7 +19,7 @@ namespace osu.Framework.Graphics.UserInterface
 
         public Bindable<string> Current { get; } = new Bindable<string>(string.Empty);
 
-        public DirectoryNavigator(string directory) 
+        public DirectoryNavigator(string directory)
         {
             Current.Value = directory;
             Current.ValueChanged += value => updateEntries();
@@ -43,7 +46,6 @@ namespace osu.Framework.Graphics.UserInterface
                     entries.Add(drive.RootDirectory.FullName, EntryType.Drive);
 
             } else {
-
                 //for navigating to the parent directory.
                 entries.Add("..", EntryType.Dummy);
                 
@@ -59,7 +61,7 @@ namespace osu.Framework.Graphics.UserInterface
 
             fillFlowContainer.AddRange(entries.Select(entry => {
                 var visualEntryType = CreateVisualEntryType(entry.Value, entry.Key);
-                visualEntryType.Activated += () => 
+                visualEntryType.Activated += () =>
                 {
                     switch (visualEntryType.Type)
                     {

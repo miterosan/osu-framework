@@ -1,3 +1,6 @@
+// Copyright (c) 2007-2018 ppy Pty Ltd <contact@ppy.sh>.
+// Licensed under the MIT Licence - https://raw.githubusercontent.com/ppy/osu-framework/master/LICENCE
+
 using System.Linq;
 using osu.Framework.Testing;
 using osu.Framework.Graphics;
@@ -56,20 +59,20 @@ namespace osu.Framework.Tests.Visual
                 Color4 color;
 
                 switch(type) {
-                    case EntryType.Dummy: 
+                    case EntryType.Dummy:
                         color = Color4.WhiteSmoke;
                         break;
-                    case EntryType.File: 
+                    case EntryType.File:
                         color = Color4.Yellow;
                         break;
-                    case EntryType.Directory: 
+                    case EntryType.Directory:
                         color = Color4.YellowGreen;
                         break;
-                    case EntryType.Drive: 
+                    case EntryType.Drive:
                         color = Color4.WhiteSmoke;
                         break;
                     default:
-                        throw new ArgumentException($"Entrytype {type} is not supported."); 
+                        throw new ArgumentException($"Entrytype {type} is not supported.");
                 }
 
                 AutoSizeAxes = Axes.Both;
@@ -83,7 +86,7 @@ namespace osu.Framework.Tests.Visual
                     Spacing = new Vector2(5),
                     Children = new Drawable[]
                     {
-                        new Box 
+                        new Box
                         {
                             Colour = color,
                             Anchor = Anchor.CentreLeft,
@@ -96,7 +99,7 @@ namespace osu.Framework.Tests.Visual
                             Anchor = Anchor.CentreLeft,
                             Origin = Anchor.CentreLeft
                         }
-                    } 
+                    }
                 });
             }
         }
