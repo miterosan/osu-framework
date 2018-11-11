@@ -17,10 +17,11 @@ namespace osu.Framework.Tests.Visual
 {
     public class TestCaseDirectoryNavigator : TestCase
     {
-        StyledDirectoryNavigator navigator;
 
         public TestCaseDirectoryNavigator()
         {
+            StyledDirectoryNavigator navigator;
+
             Add(navigator = new StyledDirectoryNavigator("")
             {
                 Anchor = Anchor.Centre,

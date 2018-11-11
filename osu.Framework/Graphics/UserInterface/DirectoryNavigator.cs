@@ -58,6 +58,9 @@ namespace osu.Framework.Graphics.UserInterface
 
             fillFlowContainer.AddRange(entries.Select(entry => {
                 var visualEntryType = CreateVisualEntryType(entry.Value, entry.Key);
+                if (visualEntryType == null)
+                    throw new InvalidOperationException($"{nameof(CreateVisualEntryType)} can not return null values.");
+
                 visualEntryType.Action += () =>
                 {
                     switch (visualEntryType.Type)
