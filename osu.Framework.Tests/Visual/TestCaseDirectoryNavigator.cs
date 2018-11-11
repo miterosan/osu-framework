@@ -15,7 +15,7 @@ using static osu.Framework.Graphics.UserInterface.DirectoryNavigator;
 
 namespace osu.Framework.Tests.Visual
 {
-    public partial class TestCaseDirectoryNavigator : TestCase
+    public class TestCaseDirectoryNavigator : TestCase
     {
         StyledDirectoryNavigator navigator;
 
@@ -29,15 +29,15 @@ namespace osu.Framework.Tests.Visual
                 Size = new Vector2(0.8f),
             });
 
-            AddAssert("There are only drives visible", () => navigator.internalFillFlowContainer.Children.All(entry => entry.Type == EntryType.Drive));
-            AddStep("Select the first drive", () => navigator.internalFillFlowContainer.Children.First().Click());
+            AddAssert("There are only drives visible", () => navigator.InternalFillFlowContainer.Children.All(entry => entry.Type == EntryType.Drive));
+            AddStep("Select the first drive", () => navigator.InternalFillFlowContainer.Children.First().Click());
             AddUntilStep(() => {
-                navigator.internalFillFlowContainer.Children.Last(entry => entry.Type == EntryType.Directory).Click();
-                return navigator.internalFillFlowContainer.Children.Count(entry => entry.Type == EntryType.Directory) == 0;
+                navigator.InternalFillFlowContainer.Children.Last(entry => entry.Type == EntryType.Directory).Click();
+                return navigator.InternalFillFlowContainer.Children.Count(entry => entry.Type == EntryType.Directory) == 0;
             });
         }
 
-        class StyledDirectoryNavigator : DirectoryNavigator
+        private class StyledDirectoryNavigator : DirectoryNavigator
         {
             public StyledDirectoryNavigator(string directory) : base(directory)
             {
@@ -46,13 +46,13 @@ namespace osu.Framework.Tests.Visual
             protected override FileSystemEntry CreateVisualEntryType(EntryType entryType, string name)
                 => new StyledFileSystemEntry(entryType, name);
 
-            public FillFlowContainer<FileSystemEntry> internalFillFlowContainer { get; private set; }
+            public FillFlowContainer<FileSystemEntry> InternalFillFlowContainer { get; private set; }
 
             protected override FillFlowContainer<FileSystemEntry> CreateFillFlow()
-                => internalFillFlowContainer = base.CreateFillFlow();
+                => InternalFillFlowContainer = base.CreateFillFlow();
         }
 
-        class StyledFileSystemEntry : FileSystemEntry
+        private class StyledFileSystemEntry : FileSystemEntry
         {
             public StyledFileSystemEntry(EntryType type, string name) : base(type, name)
             {

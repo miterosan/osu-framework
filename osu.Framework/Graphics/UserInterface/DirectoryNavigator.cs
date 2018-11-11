@@ -36,7 +36,7 @@ namespace osu.Framework.Graphics.UserInterface
 
             var entries = new Dictionary<string, EntryType>();
 
-            if (String.IsNullOrEmpty(Current.Value))
+            if (string.IsNullOrEmpty(Current.Value))
             {
                 //display all available drives
                 foreach (var drive in DriveInfo.GetDrives())
@@ -49,9 +49,9 @@ namespace osu.Framework.Graphics.UserInterface
                 DirectoryInfo currentDirectory = new DirectoryInfo(Current.Value);
 
                 //iterating over the directories and files.
-                foreach (var directory in currentDirectory.EnumerateDirectories().Select(info => info.Name))
+                foreach (string directory in currentDirectory.EnumerateDirectories().Select(info => info.Name))
                     entries.Add(directory, EntryType.Directory);
-                foreach (var file in currentDirectory.EnumerateFiles().Select(info => info.Name))
+                foreach (string file in currentDirectory.EnumerateFiles().Select(info => info.Name))
                     entries.Add(file, EntryType.File);
             }
 
