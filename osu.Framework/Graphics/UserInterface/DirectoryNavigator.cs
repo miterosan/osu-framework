@@ -5,12 +5,8 @@ using System;
 using System.IO;
 using System.Linq;
 using System.Collections.Generic;
-using OpenTK.Graphics;
 using osu.Framework.Configuration;
 using osu.Framework.Graphics.Containers;
-using osu.Framework.Graphics.Shapes;
-using osu.Framework.Graphics.Sprites;
-using osu.Framework.Input.States;
 
 namespace osu.Framework.Graphics.UserInterface
 {
@@ -20,7 +16,7 @@ namespace osu.Framework.Graphics.UserInterface
 
         public Bindable<string> Current { get; } = new Bindable<string>(string.Empty);
 
-        public DirectoryNavigator(string directory)
+        protected DirectoryNavigator(string directory)
         {
             Current.Value = directory;
             Current.ValueChanged += value => updateEntries();
@@ -114,7 +110,7 @@ namespace osu.Framework.Graphics.UserInterface
             public EntryType Type { get; }
             public string Path { get; }
 
-            public FileSystemEntry(EntryType type, string path) {
+            protected FileSystemEntry(EntryType type, string path) {
                 Type = type;
                 Path = path ?? throw new ArgumentNullException(nameof(path));
             }
