@@ -58,8 +58,6 @@ namespace osu.Framework.Graphics.UserInterface
 
             fillFlowContainer.AddRange(entries.Select(entry => {
                 var visualEntryType = CreateVisualEntryType(entry.Value, entry.Key);
-                if (visualEntryType == null)
-                    throw new InvalidOperationException($"{nameof(CreateVisualEntryType)} can not return null values.");
 
                 visualEntryType.Action += () =>
                 {
@@ -67,6 +65,8 @@ namespace osu.Framework.Graphics.UserInterface
                     {
                         case EntryType.Directory:
                         case EntryType.Dummy:
+                            if (Current.Value == null)
+                                throw new InvalidOperationException($"{nameof(Current)} can not have null value.");
 
                             // then we are on root we want to go the drives selection.
                             if (Path.GetPathRoot(Current.Value).Equals(Current.Value) && visualEntryType.Path == "..")
