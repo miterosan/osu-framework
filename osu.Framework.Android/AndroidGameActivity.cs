@@ -5,6 +5,8 @@ using Android.App;
 using Android.Content;
 using Android.OS;
 using Android.Runtime;
+using Java.Lang;
+using osu.Framework.Logging;
 
 namespace osu.Framework.Android
 {
@@ -24,6 +26,8 @@ namespace osu.Framework.Android
         {
             base.OnCreate(savedInstanceState);
 
+            Thread.DefaultUncaughtExceptionHandler = new UncaughtExceptionHandler();
+
             SetContentView(gameView = new AndroidGameView(this, CreateGame()));
         }
 
@@ -31,6 +35,14 @@ namespace osu.Framework.Android
             base.OnPause();
             // Because Android is not playing nice with Background - we just kill it
             System.Diagnostics.Process.GetCurrentProcess().Kill();
+        }
+
+        private class UncaughtExceptionHandler : Java.Lang.Object, Thread.IUncaughtExceptionHandler
+        {
+            public void UncaughtException(Thread t, Throwable e)
+            {
+                Logger.Error(e, $"Unhandled java exception: {e.Message}", recursive: true);
+            }
         }
     }
 }
